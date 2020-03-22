@@ -5,11 +5,12 @@ const player2 = "O";
 var playTime = player1;
 var gameOver = false;
 var vencedor = ""
+var espacos = document.getElementsByClassName("espaco");
 
 atualizaMostrador();
 inicializaEspacos();
 
-
+/* ATUALIZA O MOSTRADOR PARA MOSTRAR A VER DO JOGADOR ATUAL */
 function atualizaMostrador(){
 	if (playTime == player1){
 		var player = document.querySelectorAll("div#mostrador img")[0];
@@ -18,26 +19,25 @@ function atualizaMostrador(){
 		var player = document.querySelectorAll("div#mostrador img")[0];
 		player.setAttribute("src", "Imagens/O.png");
 	}
-}//funcionando bem
+}
 
+/* INICIALIZA OS ESPAÇOS E ESPERA O CLICK */
 function inicializaEspacos(){
-	
-	var espacos = document.getElementsByClassName("espaco");
 	
 	for (var i = 0; i < espacos.length; i++){
 		espacos[i].addEventListener("click",fazJogada);
 		
-	}
-	
-} //fucionando bem
+	}	
+}
 
+/* FAZ A JOGADA DO JOGADOR ATUAL */
 function fazJogada(){
 	if (gameOver) {
 		return;
 	}
 	if (this.getElementsByTagName("img").length == 0){
 		if (playTime == player1){
-			this.innerHTML = "<img src='Imagens/X.png'>";
+			this.innerHTML = "<img src=\"Imagens/X.png\">";
 			this.setAttribute("jogada", player1);
 			playTime = player2;
 		}else{
@@ -79,13 +79,20 @@ function verificarVercedor(){
 }
 
 async function mostraResultado(){
+	
 	if(gameOver){
-		if (this.vencedor == ""){
-			await sleep(50);
-			alert("Empate");
-		}else{
-			await sleep(50);
-			alert("O \""+this.vencedor+"\" é o vencedor!!!")
+		await sleep(50);
+		alert("O \""+this.vencedor+"\" é o vencedor!!!")
+	}else{
+		gameOver = true;
+		for(var i=0; i<espacos.length; i++){
+			if (espacos[i].getAttribute("jogada")==""){
+				gameOver = false;
+			}
+		}
+		if(gameOver){
+		await sleep(50);
+		alert("Deu velha!!!");
 		}
 	}
 }
